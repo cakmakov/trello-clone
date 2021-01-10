@@ -5,26 +5,26 @@ const initialState = {};
 const listsReducer = (state = initialState, action) => {
     switch (action.type) {
       case types.ADD_LIST: {
-        const { listId, listTitle } = action.payload;
+        const { listId, listTitle } = action.value;
         return {
           ...state,
           [listId]: { _id: listId, title: listTitle, cards: [] }
         };
       }
       case types.CHANGE_LIST_TITLE: {
-        const { listId, listTitle } = action.payload;
+        const { listId, listTitle } = action.value;
         return {
           ...state,
           [listId]: { ...state[listId], title: listTitle }
         };
       }
       case types.DELETE_LIST: {
-        const { listId } = action.payload;
+        const { listId } = action.value;
         const { [listId]: deletedList, ...restOfLists } = state;
         return restOfLists;
       }
       case types.ADD_CARD: {
-        const { listId, cardId } = action.payload;
+        const { listId, cardId } = action.value;
         return {
           ...state,
           [listId]: { ...state[listId], cards: [...state[listId].cards, cardId] }
@@ -36,7 +36,7 @@ const listsReducer = (state = initialState, action) => {
           newCardIndex,
           sourceListId,
           destListId
-        } = action.payload;
+        } = action.value;
         // Move within the same list
         if (sourceListId === destListId) {
           const newCards = Array.from(state[sourceListId].cards);
@@ -59,7 +59,7 @@ const listsReducer = (state = initialState, action) => {
         };
       }
       case types.DELETE_CARD: {
-        const { cardId: deletedCardId, listId } = action.payload;
+        const { cardId: deletedCardId, listId } = action.value;
         const filterDeleted = cardId => cardId !== deletedCardId;
         return {
           ...state,
