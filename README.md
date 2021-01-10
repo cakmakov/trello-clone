@@ -2,15 +2,19 @@
 
 ## Instructions
 
-Firstly, clone the repository to your local environment.Then, follow these steps:
+Firstly, clone the repository to your local environment with following script.
 
-1)Open your ide and navigate to the 'development' branch.
+### `git clone https://github.com/cakmakov/trello-clone.git`
+
+Then, follow these steps:
+
+1)Open the project in your ide and navigate to the 'development' branch.
 <br />
-2)Open your terminal and install node_modules with following script.
+2)After, open your terminal and install node_modules with following script.
 
 ### `yarn install`
 
-3)After node modules installed type following script.
+3)Lastly, type following script to run the project.
 
 ### `yarn start`
 
