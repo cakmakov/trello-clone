@@ -5,11 +5,13 @@ import { connect } from "react-redux";
 
 import CardEditor from "../cardEditor/CardEditor";
 
+import { Draggable } from "react-beautiful-dnd";
+
 const Card = (props) => {
-    const { card } = props;
-    const { text, setText } = useState("");
-    const { hover, setHover } = useState(false);
-    const { editing, setEditing } = useState(false);
+    const { card, index} = props;
+    const [ text, setText ] = useState("");
+    const [ hover, setHover ] = useState(false);
+    const [ editing, setEditing ] = useState(false);
 
     const startHover = () => setHover(true);
     const endHover = () => setHover(false);
@@ -18,9 +20,12 @@ const Card = (props) => {
       setHover(false);
       setEditing(true);
       setText(props.card.text);
-    }
+    };
 
-    const endEditing = () => this.setState({ hover: false, editing: false });
+    const endEditing = () => {
+      setHover(false);
+      setEditing(false);
+    };
 
     const editCard = async text => {
       const { card, dispatch } = props;
@@ -44,20 +49,27 @@ const Card = (props) => {
 
     if (!editing) {
       return (
-        <div
-          className="Card"
-          onMouseEnter={startHover}
-          onMouseLeave={endHover}
-        >
-          {hover && (
-            <div className="Card-Icons">
-              <div className="Card-Icon" onClick={startEditing}>
-                <ion-icon name="create" />
-              </div>
+        <Draggable draggableId={card._id} index={index}>
+          {(provided, snapshot) => (
+            <div
+              ref={provided.innerRef}
+              {...provided.draggableProps}
+              {...provided.dragHandleProps}
+              className="Card"
+              onMouseEnter={startHover}
+              onMouseLeave={endHover}
+            >
+              {hover && (
+                <div className="Card-Icons">
+                  <div className="Card-Icon" onClick={startEditing}>
+                    <ion-icon name="create" />
+                  </div>
+                </div>
+              )}
+              {card.text}
             </div>
           )}
-          {card.text}
-        </div>
+        </Draggable>
       );
     } else {
       return (
@@ -72,7 +84,7 @@ const Card = (props) => {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  card: state.cardsById[ownProps.cardId]
+  card: state.cards[ownProps.cardId]
 });
 
 export default connect(mapStateToProps)(Card);
