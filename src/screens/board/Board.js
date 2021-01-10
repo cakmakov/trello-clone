@@ -4,11 +4,15 @@ import React, { useState} from "react";
 import { connect } from "react-redux";
 
 import List from "../list/List";
-import AddList from "../addList/AddList";
+import AddList from "../../components/addList/AddList";
 
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
+import { moveList } from "../../redux/actions/board";
+import { moveCard } from "../../redux/actions/lists";
+
 const Board = (props) => {
+    console.log(props);
     const { board } = props;
     const [ addingList, setAddingList ] = useState(false);
 
@@ -18,18 +22,15 @@ const Board = (props) => {
       // dropped outside the allowed zones
       if (!destination) return;
     
-      const { dispatch } = props;
+      const { moveList, moveCard } = props;
     
       // Move list
       if (type === "COLUMN") {
         // Prevent update if nothing has changed
         if (source.index !== destination.index) {
-          dispatch({
-            type: "MOVE_LIST",
-            payload: {
-              oldListIndex: source.index,
-              newListIndex: destination.index
-            }
+          moveList({
+            oldListIndex: source.index,
+            newListIndex: destination.index
           });
         }
         return;
@@ -40,14 +41,11 @@ const Board = (props) => {
         source.index !== destination.index ||
         source.droppableId !== destination.droppableId
       ) {
-        dispatch({
-          type: "MOVE_CARD",
-          payload: {
-            sourceListId: source.droppableId,
-            destListId: destination.droppableId,
-            oldCardIndex: source.index,
-            newCardIndex: destination.index
-          }
+        moveCard({
+          sourceListId: source.droppableId,
+          destListId: destination.droppableId,
+          oldCardIndex: source.index,
+          newCardIndex: destination.index
         });
       }
     };
@@ -84,4 +82,9 @@ const Board = (props) => {
 
 const mapStateToProps = state => ({ board: state.board });
 
-export default connect(mapStateToProps)(Board);
+const mapDispatchToProps = {
+  moveList,
+  moveCard
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Board);

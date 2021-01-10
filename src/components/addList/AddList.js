@@ -6,19 +6,21 @@ import ListEditor from "../listEditor/ListEditor";
 import shortid from "shortid";
 import EditButtons from "../button/EditButtons";
 
+import { addList } from "../../redux/actions/lists";
+
 const AddList = (props) => {
     const [ title, setTitle ] = useState("");
 
     const handleChangeTitle = e => setTitle(e.target.value);
 
     const createList = async () => {
-        const { dispatch } = props;
+        const { addList } = props;
 
         props.toggleAddingList();
 
-        dispatch({
-        type: "ADD_LIST",
-        payload: { listId: shortid.generate(), listTitle: title }
+        addList({ 
+          listId: shortid.generate(), 
+          listTitle: title 
         });
     };
 
@@ -42,4 +44,10 @@ const AddList = (props) => {
     );  
 }
 
-export default connect()(AddList);
+const mapStateToProps = () => ({});
+
+const mapDispatchToProps = {
+  addList
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddList);

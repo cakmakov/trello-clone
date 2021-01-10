@@ -1,0 +1,1 @@
+export ListOutline from './svg/list-outline.svg';

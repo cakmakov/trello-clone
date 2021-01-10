@@ -4,12 +4,13 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 
 import Card from "../card/Card";
-import CardEditor from "../cardEditor/CardEditor";
-import ListEditor from "../listEditor/ListEditor";
+import CardEditor from "../../components/cardEditor/CardEditor";
+import ListEditor from "../../components/listEditor/ListEditor";
 
 import shortid from "shortid";
 
 import { Droppable, Draggable } from "react-beautiful-dnd";
+import { addCard, changeListTitle, deleteList } from "../../redux/actions/lists";
 
 const List = (props) => {
     const { list, index } = props;
@@ -20,15 +21,16 @@ const List = (props) => {
     const toggleAddingCard = () => setAddingCard(!addingCard);
 
     const addCard = async cardText => {
-      const { listId, dispatch } = props;
+      const { listId, addCard } = props;
 
       toggleAddingCard();
 
       const cardId = shortid.generate();
 
-      dispatch({
-        type: "ADD_CARD",
-        payload: { cardText, cardId, listId }
+      addCard({ 
+        cardText, 
+        cardId, 
+        listId 
       });
     };
 
@@ -37,22 +39,22 @@ const List = (props) => {
     const handleChangeTitle = e => setTitle(e.target.value);
 
     const editListTitle = async () => {
-      const { listId, dispatch } = props;
+      const { listId, changeListTitle } = props;
 
       toggleEditingTitle();
 
-      dispatch({
-        type: "CHANGE_LIST_TITLE",
-        payload: { listId, listTitle: title }
+      changeListTitle({ 
+        listId, 
+        listTitle: title 
       });
     };
 
     const deleteList = async () => {
-      const { listId, list, dispatch } = props;
+      const { listId, list, deleteList } = props;
 
-      dispatch({
-        type: "DELETE_LIST",
-        payload: { listId, cards: list.cards }
+      deleteList({ 
+        listId, 
+        cards: list.cards 
       });
     };
 
@@ -90,6 +92,7 @@ const List = (props) => {
                         cardId={cardId}
                         index={index}
                         listId={list._id}
+                        listTitle={list.title}
                       />
                     ))}
 
@@ -119,4 +122,10 @@ const mapStateToProps = (state, ownProps) => ({
   list: state.lists[ownProps.listId]
 });
 
-export default connect(mapStateToProps)(List);
+const mapDispatchToProps = {
+  addCard,
+  changeListTitle,
+  deleteList
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(List);
