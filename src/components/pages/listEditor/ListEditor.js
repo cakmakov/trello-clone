@@ -25,17 +25,16 @@ const ListEditor = (props) => {
 
   useEffect(() => {
     document.addEventListener("click", handleClick, false);
-  
-    // returned function will be called on component unmount 
-    return () => {
-        document.removeEventListener("click", handleClick, false);
-    }
-  });
+  }, []);
+
+  useEffect(() => {
+    document.removeEventListener("click", handleClick, false);
+  }, []);
 
   const { title, handleChangeTitle, deleteList } = props;
 
   return (
-    <div className="List-Title-Edit" ref={this.ref}>
+    <div className="List-Title-Edit" ref={ref}>
       <TextareaAutosize
         autoFocus
         className="List-Title-Textarea"

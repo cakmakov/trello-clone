@@ -7,7 +7,7 @@ import shortid from "shortid";
 import EditButtons from "../button/EditButtons";
 
 const AddList = (props) => {
-    const { title, setTitle } = useState("");
+    const [ title, setTitle ] = useState("");
 
     const handleChangeTitle = e => setTitle(e.target.value);
 

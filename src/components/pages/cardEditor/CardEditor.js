@@ -2,16 +2,17 @@ import "./styles.css";
 
 import React, { useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
+import EditButtons from "../button/EditButtons";
 
 const CardEditor = (props) => {
-  const { text, setText } = useState(props.text || "");
+  const [ text, setText ] = useState(props.text || "");
 
   const handleChangeText = event => setText(event.target.value);
 
   const onEnter = e => {
     if (e.keyCode === 13) {
       e.preventDefault();
-      props.onSave(text);
+      onSave(text);
     }
   };
 
@@ -29,6 +30,12 @@ const CardEditor = (props) => {
           onKeyDown={onEnter}
         />
       </div>
+      <EditButtons
+          handleSave={() => onSave(text)}
+          saveLabel={adding ? "Add card" : "Save"}
+          handleDelete={onDelete}
+          handleCancel={onCancel}
+      />
     </div>
   );
 }
